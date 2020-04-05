@@ -1,0 +1,41 @@
+version: '3'
+services:
+  fiber-api:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    environment:
+      REDIS_HOST: redis
+      REDIS_PASSWORD: ''
+      REDIS_PORT: 6379
+      POSTGRES_DB: fiber_api
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: postgres_user
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    depends_on:
+      - redis
+      - fiber_api_psql
+    container_name: fiber-api
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    expose:
+      - 6379
+  fiber_api_psql:
+    image: postgres:12.2-alpine
+    environment:
+      PGDATA: /data/postgres/data
+      POSTGRES_DB: fiber_api
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: postgres_user
+    stdin_open: true
+    tty: true
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    container_name: fiber_api_psql

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+   <!-- Bootstrap CSS -->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+<body>
+<div class="container-fluid">
+   <div class="card">
+      <div class="card-body">
+         <strong>Websocket PubSub Message App</strong>
+         <ol class="ordered-list" >
+            <li >To start click on open.</li>
+            <li >Type and click to send button.</li>
+            <li >To close socket connection.</li>
+         </ol>
+         <form>
+            <div class="form-group">
+               <button type="button" class="btn btn-primary" id="open">Open</button>
+               <button type="button" class="btn btn-danger" id="close">Close</button>
+
+            </div>
+            <div class="form-group">
+               <input id="input" type="text"class="form-control"  value="Hi">
+               <button id="send" class="btn btn-success">Send</button>
+            </div>
+
+         </form>
+
+         <div id="output"></div>
+
+      </div>
+   </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script>
+   window.addEventListener("load", function(evt) {
+      var output = document.getElementById("output");
+      var input = document.getElementById("input");
+      var ws;
+      var print = function(message) {
+         var d = document.createElement("div");
+         d.textContent = message;
+         output.appendChild(d);
+      };
+      document.getElementById("open").onclick = function(evt) {
+         if (ws) {
+            return false;
+         }
+
+         console.log({{.socket_address}});
+
+         ws = new WebSocket("{{.socket_address}}");
+         ws.onopen = function(evt) {
+            print("OPEN");
+         }
+         ws.onclose = function(evt) {
+            print("CLOSE");
+            ws = null;
+         }
+         ws.onmessage = function(evt) {
+            console.log(evt);
+            print("RESPONSE: " + evt.data);
+         }
+         ws.onerror = function(evt) {
+            print("ERROR: " + evt.data);
+         }
+         return false;
+      };
+      document.getElementById("send").onclick = function(evt) {
+         if (!ws) {
+            return false;
+         }
+         print("SEND: " + input.value);
+         ws.send(input.value);
+         return false;
+      };
+      document.getElementById("close").onclick = function(evt) {
+         if (!ws) {
+            return false;
+         }
+         ws.close();
+         return false;
+      };
+   });
+</script>
+</body>

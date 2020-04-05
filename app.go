@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/helmet"
 	"github.com/gofiber/logger"
 	"github.com/gofiber/websocket"
-	"github.com/gofiber/db"
+	"gofibe/fiber/db"
 	"gofibe/fiber/routes"
 	"log"
 	"math/rand"

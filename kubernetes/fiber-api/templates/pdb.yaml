@@ -1,0 +1,16 @@
+{{- if .Values.budget.minAvailable -}}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "fiber-api.fullname" . }}
+  labels:
+    app: {{ include "fiber-api.name" . }}
+    chart: {{ template "fiber-api.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "fiber-api.name" . }}
+  minAvailable: {{ .Values.budget.minAvailable }}
+  {{- end -}}

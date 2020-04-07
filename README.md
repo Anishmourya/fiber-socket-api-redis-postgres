@@ -105,3 +105,9 @@ $ docker pull anishdhanka/fiber-app
 ```
 $ docker run -d -p 3000:3000 -e REDIS_HOST='redis' -e  REDIS_PASSWORD=''  -e  REDIS_PORT='6379' -e  POSTGRES_DB='fiber_api' -e  POSTGRES_PASSWORD='test' -e  POSTGRES_USER='postgres_user' --name fiber-api --restart=always  -td  anishdhanka/fiber-app
 ```
+
+
+# Kubernetes Installation
+```
+$ helm install --name fiber-app kubernetes/fiber-api --set REDIS_HOST='redis',REDIS_PASSWORD='',POSTGRES_DB='fiber_api',POSTGRES_PASSWORD='test',POSTGRES_USER='postgres_user'
+```
